@@ -1,12 +1,10 @@
 import axios from "axios";
 
-const API_BASE_URL =
-  import.meta.env.MODE === "development"
+const baseURL =
+  window.location.hostname === "localhost"
     ? "http://localhost:3000/api"
     : "http://backend:3000/api";
 
-const api = axios.create({
-  baseURL: API_BASE_URL,
-});
+const api = axios.create({ baseURL });
 
 export default api;
