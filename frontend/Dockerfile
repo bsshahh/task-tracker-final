@@ -1,15 +1,21 @@
-# Use Debian-based Node 22 (not alpine)
-FROM node:22-slim
+# Stage 1: Build the React app
+FROM node:22-slim AS build
 
 WORKDIR /app
 
+# Copy and install deps
 COPY package*.json ./
+RUN npm install
 
-# Clean install to avoid cache issues
-RUN rm -rf node_modules package-lock.json && npm install
-
+# Copy all files and build
 COPY . .
+RUN npm run build
 
-EXPOSE 5173
+# Stage 2: Serve with NGINX
+FROM nginx:alpine
 
-CMD ["npm", "run", "dev"]
+# Copy built app from build stage
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

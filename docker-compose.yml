@@ -11,15 +11,12 @@ services:
       - ./backend/.env
     volumes:
       - ./backend:/app
+      - /app/node_modules  # prevent overwriting installed node_modules
     command: ["npm", "start"]
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    build: ./frontend
+    container_name: task-tracker-frontend
     restart: always
     ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-    command: ["npm", "run", "dev"]
+      - "5173:80"
