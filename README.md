@@ -73,13 +73,15 @@ Swagger Docs: http://localhost:3000/api-docs
 
 
 # 💻 Manual Run (Without Docker)
-Backend:
+- Backend:
+```
 cd backend
 npm install
 node swagger.js   # generate Swagger docs
 npm run dev
 
-Frontend:
+- Frontend:
+```
 cd frontend
 npm install
 npm run dev
