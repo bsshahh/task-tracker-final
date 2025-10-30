@@ -55,10 +55,10 @@ JWT_SECRET=your_secret_key
 
 - ⚠️ Replace `<user>, <password>`, and port (12345) with the actual credentials from your Railway database.
 
-💡 Admin Registration Note:
+# 💡 Admin Registration Note:
 While registering a new user as Admin, use this key:
-ADMIN_KEY = ADMIN123
-
+ ADMIN_KEY = ADMIN123
+---
 # 3. Run with Docker Compose
 
 To build and start both backend & frontend containers:
@@ -85,12 +85,13 @@ npm run dev
 
 ```
 - Frontend:
-
+```
 cd frontend
 npm install
 npm run dev
 
-For detailed backend setup → backend/README.md
+```
+# For detailed backend setup → backend/README.md
 
 ## 🎬 Video of working APIs 
 
