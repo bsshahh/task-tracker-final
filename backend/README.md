@@ -18,7 +18,7 @@ It includes JWT authentication, Swagger documentation (Autogen), and Docker supp
 # ⚙️ Setup & Installation
 - 1️⃣ Clone the repository
 git clone https://github.com/bsshahh/task-tracker-lite.git
-cd task-tracker-lite
+cd task-tracker-lite/backend
 
 - 2️⃣ Install dependencies
 npm install
