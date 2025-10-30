@@ -48,9 +48,12 @@ The project is fully Dockerized and uses a Railway-hosted MySQL database for pro
 - Create a .env file inside backend/:
 
 PORT=3000
-DATABASE_URL=mysql://<user>:<password>@containers-us-west-145.railway.app:12345/railway
+
+DATABASE_URL=mysql://`<user>`:`<password>`@containers-us-west-145.railway.app:12345/railway
+
 JWT_SECRET=your_secret_key
-- ⚠️ Replace <user>, <password>, and port (12345) with the actual credentials from your Railway database.
+
+- ⚠️ Replace `<user>, <password>`, and port (12345) with the actual credentials from your Railway database.
 
 💡 Admin Registration Note:
 While registering a new user as Admin, use this key:
@@ -80,8 +83,9 @@ npm install
 node swagger.js   # generate Swagger docs
 npm run dev
 
-- Frontend:
 ```
+- Frontend:
+
 cd frontend
 npm install
 npm run dev
