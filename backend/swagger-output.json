@@ -1,0 +1,408 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Task Tracker Lite API",
+    "description": "API for user authentication, role-based access, task & category management",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "schemes": ["http"],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Register a new user",
+        "description": "Registers a new user (Admin or Normal User) with name, email, password, and confirmPassword.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["name", "email", "password", "confirmPassword"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john@example.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "John@1234",
+                  "description": "Must contain 8–12 characters, 1 uppercase, 1 number, and 1 special character"
+                },
+                "confirmPassword": {
+                  "type": "string",
+                  "example": "John@1234"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "user",
+                  "enum": ["admin", "user"]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": { "description": "User registered successfully" },
+          "400": { "description": "Validation failed" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Login user",
+        "description": "Logs in an existing user and returns a JWT token.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["email", "password"],
+              "properties": {
+                "email": { "type": "string", "example": "john@example.com" },
+                "password": { "type": "string", "example": "John@1234" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Login successful" },
+          "400": { "description": "Invalid credentials" },
+          "404": { "description": "User not found" }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Logout user",
+        "description": "Logs out the authenticated user by invalidating their token.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "example": "Bearer <your_token_here>"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Logout successful" }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": ["Categories (For All)"],
+        "summary": "Get all categories",
+        "description": "Retrieves all available categories. Admin access required.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "example": "Bearer <your_token_here>"
+          }
+        ],
+        "responses": {
+          "200": { "description": "List of categories" },
+          "403": { "description": "Forbidden" }
+        }
+      },
+      "post": {
+        "tags": ["Categories (Admin Only)"],
+        "summary": "Create a new category",
+        "description": "Allows Admins to create a new category like Work, Personal, etc.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "example": "Bearer <your_token_here>"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["name"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Work"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": { "description": "Category created" },
+          "403": { "description": "Forbidden" }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "put": {
+        "tags": ["Categories (Admin Only)"],
+        "description": "Update a category (Admin only)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Category ID to update"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["name"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Updated Category Name"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category updated successfully"
+          },
+          "400": {
+            "description": "Invalid input or missing name"
+          },
+          "401": {
+            "description": "Unauthorized (missing or invalid token)"
+          },
+          "403": {
+            "description": "Forbidden (not an admin user)"
+          },
+          "404": {
+            "description": "Category not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Categories (Admin Only)"],
+        "description": "Delete a category (Admin only)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Category ID to delete"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token for authentication"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized (missing or invalid token)"
+          },
+          "403": {
+            "description": "Forbidden (not an admin user)"
+          },
+          "404": {
+            "description": "Category not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/tasks": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Get all tasks (User specific)",
+        "description": "Retrieves all tasks created by the authenticated user.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "example": "Bearer <your_token_here>"
+          }
+        ],
+        "responses": {
+          "200": { "description": "List of user tasks" }
+        }
+      },
+      "post": {
+        "tags": ["Tasks"],
+        "summary": "Create a new task",
+        "description": "Allows user to create a new task with title, description, due date, and category.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "example": "Bearer <your_token_here>"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["title", "description", "dueDate", "categoryId"],
+              "properties": {
+                "title": { "type": "string", "example": "Finish project" },
+                "description": { "type": "string", "example": "Complete the backend logic" },
+                "dueDate": { "type": "string", "example": "2025-11-01" },
+                "categoryId": { "type": "integer", "example": 2 }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": { "description": "Task created successfully" }
+        }
+      }
+    },
+    "/tasks/{id}": {
+      "patch": {
+        "tags": ["Tasks"],
+        "summary": "Update a task",
+        "description": "Allows user to update title, description, status, or due date (before due date).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "example": 1
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "example": "Bearer <your_token_here>"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": { "type": "string", "example": "Update project" },
+                "status": { "type": "string", "example": "Done" },
+                "dueDate": { "type": "string", "example": "2025-11-05" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Task updated" }
+        }
+      },
+      "delete": {
+        "tags": ["Tasks"],
+        "summary": "Delete a task",
+        "description": "Deletes the specified task by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "example": 1
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "example": "Bearer <your_token_here>"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Task deleted successfully" }
+        }
+      }
+    },
+    "/admin/dashboard": {
+      "get": {
+        "tags": ["Admin Dashboard"],
+        "summary": "Admin view of all tasks",
+        "description": "Provides filtering by user, status, and due date range.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "example": "Bearer <your_token_here>"
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "type": "integer",
+            "example": 3
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "type": "string",
+            "example": "Todo"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "type": "string",
+            "example": "2025-10-01"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "type": "string",
+            "example": "2025-11-01"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Dashboard data retrieved successfully" }
+        }
+      }
+    }
+  }
+}
