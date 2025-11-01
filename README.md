@@ -38,7 +38,7 @@ The project is fully Dockerized and uses a Railway-hosted MySQL database for pro
 
 ## ⚙️ Setup Instructions
 # 🧰 1. Clone Repository
-- git clone https://github.com/bsshahh/task-tracker-lite.git
+- git clone https://github.com/bsshahh/task-tracker-final.git
 - cd task-tracker-lite
 
 # 📦 2. Environment Setup
